@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "outDir": "./build",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "target": "es6"
+  }
+}
