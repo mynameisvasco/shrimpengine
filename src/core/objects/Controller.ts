@@ -1,7 +1,7 @@
-import { GameObject } from "../core/GameObject";
+import { GameObject } from "./GameObject";
 import { Body, Vector } from "matter-js";
-import { Engine } from "../core/Engine";
-import { Renderer } from "../core/Renderer";
+import { Engine } from "../Engine";
+import { Renderer } from "../Renderer";
 
 export class Controller extends GameObject {
   gameObject: GameObject;
@@ -34,8 +34,8 @@ export class Controller extends GameObject {
     this.gameObject.draw();
   }
 
-  public load(gl: WebGL2RenderingContext): void {
-    this.gameObject.load(gl);
+  public load(): void {
+    this.gameObject.load();
   }
 
   update(engine: Engine): void {

@@ -1,7 +1,5 @@
-import { GameObject } from "../core/GameObject";
-import { Engine } from "../core/Engine";
-import { Body } from "matter-js";
-import { Renderer } from "../core/Renderer";
+import { GameObject } from "./GameObject";
+import { Engine } from "../Engine";
 
 export class Ground extends GameObject {
   gameObject: GameObject;
@@ -12,11 +10,10 @@ export class Ground extends GameObject {
     this.body = go.body;
     this.body.isStatic = true;
     this.body.friction = friction;
-    this.body.restitution = 0;
   }
 
-  public load(gl: WebGL2RenderingContext): void {
-    this.gameObject.load(gl);
+  public load(): void {
+    this.gameObject.load();
   }
 
   public draw() {

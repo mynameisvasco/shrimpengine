@@ -1,8 +1,9 @@
-import { GameObject } from "../core/GameObject";
-import { Bodies, Vector, Render } from "matter-js";
-import { Renderer } from "../core/Renderer";
-import { Shader } from "../core/gl/Shader";
-import { GLBuffer, AttributeInfo } from "../core/gl/GLBuffer";
+import { GameObject } from "./GameObject";
+import { Bodies, Vector } from "matter-js";
+import { Renderer } from "../Renderer";
+import { Shader } from "../gl/Shader";
+import { GLBuffer, AttributeInfo } from "../gl/GLBuffer";
+import { gl } from "../gl/GLContext";
 
 export class Rectangle extends GameObject {
   width: number;
@@ -24,8 +25,8 @@ export class Rectangle extends GameObject {
     this.color = color;
   }
 
-  public load(gl: WebGL2RenderingContext): void {
-    this._buffer = new GLBuffer(2, gl);
+  public load(): void {
+    this._buffer = new GLBuffer(2);
 
     let positionAttribute = new AttributeInfo();
     //Usualy position attribute is the first one but TODO: Fix harcoded value

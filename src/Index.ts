@@ -1,8 +1,9 @@
 import { Engine } from "./core/Engine";
-import { Rectangle } from "./objects/Rectangle";
+import { Rectangle } from "./core/objects/Rectangle";
 import { Vector } from "matter-js";
-import { Controller } from "./objects/Controller";
-import { Ground } from "./objects/Ground";
+import { Controller } from "./core/objects/Controller";
+import { Ground } from "./core/objects/Ground";
+import { Game } from "./Game";
 
 const engine: Engine = new Engine(
   1280,
@@ -10,6 +11,8 @@ const engine: Engine = new Engine(
   60,
   <HTMLCanvasElement>document.getElementById("myCanvas")
 );
+
+const game: Game = new Game(engine);
 
 const r1 = new Rectangle("r1", 120, 120, "#FF0000", Vector.create(100, 50));
 const myController = new Controller("player", r1);
@@ -23,7 +26,8 @@ const ground2 = new Ground(
   new Rectangle("groundRect2", 250, 120, "#000000", Vector.create(200, 600)),
   50
 );
-engine.addGameObj(myController);
-engine.addGameObj(ground);
-engine.addGameObj(ground2);
-engine.start();
+
+game.addGameObject(myController);
+game.addGameObject(ground);
+game.addGameObject(ground2);
+engine.start(game);

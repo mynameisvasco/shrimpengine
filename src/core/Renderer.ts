@@ -1,10 +1,10 @@
 import { Vector } from "matter-js";
 import { GLBuffer, AttributeInfo } from "./gl/GLBuffer";
-import { GameObject } from "./GameObject";
+import { GameObject } from "./objects/GameObject";
 import { Shader } from "./gl/Shader";
+import { gl } from "./gl/GLContext";
 
 export class Renderer {
-  gl: WebGL2RenderingContext;
   shader: Shader;
 
   public static vertexShaderText: string = [
@@ -29,37 +29,30 @@ export class Renderer {
     "}",
   ].join("\n");
 
-  constructor(gl: WebGL2RenderingContext) {
-    this.gl = gl;
-  }
-
   public start(gObjs: GameObject[]): void {
     this.shader = new Shader(
       "myShader",
       Renderer.vertexShaderText,
       Renderer.fragmentShaderText,
-      this.gl
+      gl
     );
     this.shader.use();
-    gObjs.forEach((go) => go.load(this.gl));
+    gObjs.forEach((go) => go.load());
   }
 
   public update(gObjs: GameObject[]): void {
     this.clear();
     let colorPosition = this.shader.getUniform("vertColor");
-    this.gl.uniform4fv(
-      colorPosition,
-      Renderer.getFloatArrayFromARGB("#FF0000")
-    );
+    gl.uniform4fv(colorPosition, Renderer.getFloatArrayFromARGB("#FF0000"));
     gObjs.forEach((go) => {
-      go.load(this.gl);
+      go.load();
       go.draw();
     });
   }
 
   public clear() {
-    this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
-    this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   }
 
   public static toWebGLCoordinateX(

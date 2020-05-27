@@ -1,7 +1,7 @@
 import { Body } from "matter-js";
-import { Engine } from "./Engine";
-import { Renderer } from "./Renderer";
-import { GLBuffer } from "./gl/GLBuffer";
+import { Engine } from "../Engine";
+import { Renderer } from "../Renderer";
+import { GLBuffer } from "../gl/GLBuffer";
 
 export abstract class GameObject {
   body: Body;
@@ -16,7 +16,7 @@ export abstract class GameObject {
     return this._tag;
   }
 
-  public abstract load(gl: WebGL2RenderingContext): void;
+  public abstract load(): void;
 
   draw(): void {
     this._buffer.bind();

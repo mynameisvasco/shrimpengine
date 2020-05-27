@@ -1,7 +1,9 @@
 import * as Matter from "matter-js";
-import { GameObject } from "./GameObject";
 import { Input } from "./Input";
 import { Renderer } from "./Renderer";
+import { AbstractGame } from "./AbstractGame";
+import { GLContext } from "./gl/GLContext";
+import { MessageManager } from "./messaging/MessageManager";
 
 export class Engine {
   width: number;
@@ -12,10 +14,9 @@ export class Engine {
   canvas: HTMLCanvasElement;
   onDebugMode: boolean = true;
   physicsEngine: Matter.Engine;
-  bodiesList: Matter.Body[];
-  gameObjects: GameObject[] = [];
   input: Input;
   renderer: Renderer;
+  game: AbstractGame;
 
   constructor(
     width: number,
@@ -32,7 +33,8 @@ export class Engine {
     this.canvas.height = this.height;
 
     //Renderer
-    this.renderer = new Renderer(this.canvas.getContext("webgl2"));
+    GLContext.init(this.canvas.getContext("webgl2"));
+    this.renderer = new Renderer();
 
     //Physics
     this.physicsEngine = Matter.Engine.create();
@@ -40,12 +42,12 @@ export class Engine {
 
     //Input
     this.input = new Input();
-    this.gameObjects = [];
   }
 
-  public start() {
+  public start(game: AbstractGame) {
+    this.game = game;
     this.currentTime = performance.now();
-    this.renderer.start(this.gameObjects);
+    this.renderer.start(this.game.gameObjects);
     requestAnimationFrame(() => this.run());
   }
 
@@ -62,18 +64,14 @@ export class Engine {
   }
 
   public update() {
-    this.gameObjects.forEach((go) => go.update(this));
+    this.game.gameObjects.forEach((go) => go.update(this));
+    MessageManager.update();
   }
 
   public draw() {
     this.renderer.clear();
     if (this.onDebugMode) this.renderDebug();
-    this.renderer.update(this.gameObjects);
-  }
-
-  public addGameObj(go: GameObject): void {
-    this.gameObjects.push(go);
-    Matter.World.add(this.physicsEngine.world, go.body);
+    this.renderer.update(this.game.gameObjects);
   }
 
   private renderDebug() {
