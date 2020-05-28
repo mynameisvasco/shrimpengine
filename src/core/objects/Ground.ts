@@ -10,14 +10,7 @@ export class Ground extends GameObject {
     this.body = go.body;
     this.body.isStatic = true;
     this.body.friction = friction;
-  }
-
-  public load(): void {
-    this.gameObject.load();
-  }
-
-  public draw() {
-    this.gameObject.draw();
+    this.sprite = this.gameObject.sprite;
   }
 
   update(engine: Engine): void {

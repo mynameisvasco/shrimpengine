@@ -26,8 +26,8 @@ export class ImageAssetLoader implements IAssetLoader {
   }
 
   loadAsset(name: string): void {
-    let htmlImage = new HTMLImageElement();
-    htmlImage.onload = this.onImageLoaded(name, htmlImage);
+    let htmlImage: HTMLImageElement = new Image();
+    htmlImage.onload = () => this.onImageLoaded(name, htmlImage);
     htmlImage.src = name;
   }
 

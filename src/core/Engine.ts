@@ -4,6 +4,7 @@ import { Renderer } from "./Renderer";
 import { AbstractGame } from "./AbstractGame";
 import { GLContext } from "./gl/GLContext";
 import { MessageManager } from "./messaging/MessageManager";
+import { AssetManager } from "./assets/AssetManager";
 
 export class Engine {
   width: number;
@@ -42,6 +43,9 @@ export class Engine {
 
     //Input
     this.input = new Input();
+
+    //Asset Manager
+    AssetManager.init();
   }
 
   public start(game: AbstractGame) {
@@ -64,8 +68,8 @@ export class Engine {
   }
 
   public update() {
-    this.game.gameObjects.forEach((go) => go.update(this));
     MessageManager.update();
+    this.game.gameObjects.forEach((go) => go.update(this));
   }
 
   public draw() {

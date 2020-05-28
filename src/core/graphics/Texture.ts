@@ -9,7 +9,7 @@ import { ImageAsset } from "../assets/ImageAssetLoader";
 
 const LEVEL: number = 0;
 const BORDER: number = 0;
-const IMAGE_TMP_DATA: Uint8Array = new Uint8Array([255, 50, 255, 255]);
+const IMAGE_TMP_DATA: Uint8Array = new Uint8Array([255, 255, 255, 255]);
 
 export class Texture implements IMessageHandler {
   private _name: string;
@@ -47,21 +47,25 @@ export class Texture implements IMessageHandler {
   }
 
   loadTextureFromAsset(asset: ImageAsset): void {
-    this._width = asset.width;
-    this._height = asset.height;
+    this._width = asset.data.width;
+    this._height = asset.data.height;
     this.bind();
     gl.texImage2D(
       gl.TEXTURE_2D,
       LEVEL,
       gl.RGBA,
-      this._width,
-      this._height,
-      BORDER,
       gl.RGBA,
       gl.UNSIGNED_BYTE,
       asset.data
     );
     this._isLoaded = true;
+    if (this.isPowerOf2()) {
+      gl.generateMipmap(gl.TEXTURE_2D);
+    } else {
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    }
   }
 
   onMessage(message: Message): void {
@@ -101,5 +105,15 @@ export class Texture implements IMessageHandler {
 
   public get isLoaded(): boolean {
     return this._isLoaded;
+  }
+
+  private isPowerOf2(): boolean {
+    return (
+      this.isValuePowerOf2(this._width) && this.isValuePowerOf2(this._height)
+    );
+  }
+
+  private isValuePowerOf2(val: number): boolean {
+    return (val & (val - 1)) === 0;
   }
 }

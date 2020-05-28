@@ -11,7 +11,7 @@ export class Controller extends GameObject {
     super(tag);
     this.gameObject = go;
     this.body = go.body;
-    this._buffer = go._buffer;
+    this.sprite = go.sprite;
   }
 
   moveRight() {
@@ -26,16 +26,7 @@ export class Controller extends GameObject {
     if (this.jumpingTime < 20) {
       Body.setVelocity(this.body, Vector.create(this.body.velocity.x, -5));
       this.jumpingTime++;
-      console.log(this.jumpingTime);
     }
-  }
-
-  draw(): void {
-    this.gameObject.draw();
-  }
-
-  public load(): void {
-    this.gameObject.load();
   }
 
   update(engine: Engine): void {

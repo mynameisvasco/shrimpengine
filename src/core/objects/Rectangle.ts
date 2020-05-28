@@ -4,12 +4,12 @@ import { Renderer } from "../Renderer";
 import { Shader } from "../gl/Shader";
 import { GLBuffer, AttributeInfo } from "../gl/GLBuffer";
 import { gl } from "../gl/GLContext";
+import { Sprite } from "../graphics/Sprite";
 
 export class Rectangle extends GameObject {
   width: number;
   height: number;
   color: string;
-  shader: Shader = null;
 
   constructor(
     tag: string,
@@ -25,7 +25,7 @@ export class Rectangle extends GameObject {
     this.color = color;
   }
 
-  public load(): void {
+  /*public load(): void {
     this._buffer = new GLBuffer(2);
 
     let positionAttribute = new AttributeInfo();
@@ -36,7 +36,7 @@ export class Rectangle extends GameObject {
     this._buffer.addAttributeLocation(positionAttribute);
 
     let vertices = [
-      /*TRIANGLE 1*/
+
       //V1
       Renderer.toWebGLCoordinateX(gl, this.body.position.x - this.width / 2),
       Renderer.toWebGLCoordinateY(gl, this.body.position.y + this.height / 2),
@@ -47,7 +47,7 @@ export class Rectangle extends GameObject {
       Renderer.toWebGLCoordinateX(gl, this.body.position.x + this.width / 2),
       Renderer.toWebGLCoordinateY(gl, this.body.position.y - this.height / 2),
 
-      /*TRIANGLE 2*/
+
       //V1
       Renderer.toWebGLCoordinateX(gl, this.body.position.x + this.width / 2),
       Renderer.toWebGLCoordinateY(gl, this.body.position.y - this.height / 2),
@@ -62,7 +62,7 @@ export class Rectangle extends GameObject {
     this._buffer.pushData(vertices);
     this._buffer.dispatch();
     this._buffer.unbind();
-  }
+  }*/
 
   update(): void {}
 }

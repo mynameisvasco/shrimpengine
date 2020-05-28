@@ -10,7 +10,7 @@ export class MessageManager {
   private constructor() {}
 
   static addSubscription(code: string, handler: IMessageHandler): void {
-    if (MessageManager._subscriptions[code] !== undefined) {
+    if (MessageManager._subscriptions[code] === undefined) {
       MessageManager._subscriptions[code] = [];
     }
 
@@ -37,7 +37,7 @@ export class MessageManager {
   }
 
   static post(message: Message): void {
-    console.info("Message posted : " + message);
+    console.info("Message posted : " + message.code);
     let handlers = MessageManager._subscriptions[message.code];
     if (handlers === undefined) return;
     else {

@@ -5,48 +5,55 @@ import { Shader } from "./gl/Shader";
 import { gl } from "./gl/GLContext";
 
 export class Renderer {
-  shader: Shader;
+  shader: Shader = new Shader(
+    "myShader",
+    Renderer.vertexShaderText,
+    Renderer.fragmentShaderText
+  );
 
   public static vertexShaderText: string = [
     "precision mediump float;",
     "",
-    "attribute vec2 vertPosition;",
+    "attribute vec3 vertPosition;",
+    "attribute vec2 texCoord;",
+    "",
+    "uniform mat4 projection;",
+    "uniform mat4 model;",
+    "",
+    "varying vec2 v_texCoord;",
     "",
     "void main()",
     "{",
-    "   gl_Position = vec4(vertPosition, 0.0, 1.0);",
+    "   gl_Position =  vec4(vertPosition, 1.0);",
+    "   v_texCoord = texCoord;",
     "}",
   ].join("\n");
 
   public static fragmentShaderText: string = [
     "precision mediump float;",
     "",
-    "uniform vec4 vertColor;",
+    "uniform vec4 tint;",
+    "uniform sampler2D diffuse;",
+    "",
+    "varying vec2 v_texCoord;",
     "",
     "void main()",
     "{",
-    "   gl_FragColor = vertColor;",
+    "   gl_FragColor = tint * texture2D(diffuse,v_texCoord);",
     "}",
   ].join("\n");
 
   public start(gObjs: GameObject[]): void {
-    this.shader = new Shader(
-      "myShader",
-      Renderer.vertexShaderText,
-      Renderer.fragmentShaderText,
-      gl
-    );
     this.shader.use();
-    gObjs.forEach((go) => go.load());
+
+    gObjs.forEach((go) => go.sprite.load());
   }
 
   public update(gObjs: GameObject[]): void {
     this.clear();
-    let colorPosition = this.shader.getUniform("vertColor");
-    gl.uniform4fv(colorPosition, Renderer.getFloatArrayFromARGB("#FF0000"));
     gObjs.forEach((go) => {
-      go.load();
-      go.draw();
+      go.sprite.load();
+      go.sprite.draw(this.shader);
     });
   }
 
